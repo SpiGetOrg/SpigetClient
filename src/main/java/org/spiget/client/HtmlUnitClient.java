@@ -69,7 +69,7 @@ public class HtmlUnitClient extends SpigetClient {
 		}
 
 		Page enclosedPage = client.getCurrentWindow().getEnclosedPage();
-		return new SpigetDownload(enclosedPage.getUrl().toString(), enclosedPage.getWebResponse().getContentAsStream());
+		return new SpigetDownload(enclosedPage.getUrl().toString(), enclosedPage.getWebResponse().getContentAsStream(), page.getWebResponse().getStatusCode());
 	}
 
 	static Page getPage(WebClient client, WebRequest request) throws IOException {
