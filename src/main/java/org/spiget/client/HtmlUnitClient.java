@@ -51,7 +51,7 @@ public class HtmlUnitClient extends SpigetClient {
 			page = waitForCloudflare(client, request, page, htmlPage.asXml());
 
 			if (page instanceof HtmlPage) {
-				return new SpigetResponse(cookies, Jsoup.parse(((HtmlPage) page).asXml()));
+				return new SpigetResponse(cookies, Jsoup.parse(((HtmlPage) page).asXml()), page.getWebResponse().getStatusCode());
 			}
 		}
 

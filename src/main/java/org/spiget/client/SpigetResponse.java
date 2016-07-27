@@ -13,5 +13,6 @@ public class SpigetResponse {
 
 	protected Map<String, String> cookies = new HashMap<>();
 	protected Document document;
+	protected int code;
 
 }

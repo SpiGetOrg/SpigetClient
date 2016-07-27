@@ -36,7 +36,7 @@ public class JsoupClient extends SpigetClient {
 
 		// Request was successful
 		cookies.putAll(response.cookies());
-		return new SpigetResponse(cookies, document);
+		return new SpigetResponse(cookies, document,response.statusCode());
 	}
 
 	public static SpigetDownload download(String url) throws IOException, InterruptedException {
