@@ -18,8 +18,8 @@ public abstract class SpigetClient {
 
 	public static JsonObject config;
 
-	public static final String BASE_URL  = "https://spigotmc.org/";
-	public static final String userAgent = config.get("request.userAgent").getAsString();
+	public static final String BASE_URL = "https://spigotmc.org/";
+	public static String userAgent;
 
 	public static boolean             bypassCloudflare = true;
 	public static Map<String, String> cookies          = new HashMap<>();
