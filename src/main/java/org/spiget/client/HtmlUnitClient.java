@@ -73,6 +73,7 @@ public class HtmlUnitClient extends SpigetClient {
 	}
 
 	static Page getPage(WebClient client, WebRequest request) throws IOException {
+		client.getCookieManager().clearCookies();
 		for (Map.Entry<String, String> cookie : cookies.entrySet()) {
 			client.getCookieManager().addCookie(new Cookie(COOKIE_HOST, cookie.getKey(), cookie.getValue()));
 		}
