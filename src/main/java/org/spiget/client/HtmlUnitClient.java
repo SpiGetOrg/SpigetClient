@@ -41,6 +41,11 @@ public class HtmlUnitClient extends SpigetClient {
 		return webClient;
 	}
 
+	public static void disposeClient() {
+		webClient.close();
+		webClient = null;
+	}
+
 	public static SpigetResponse get(String url) throws IOException, InterruptedException {
 		WebClient client = getClient();
 		WebRequest request = new WebRequest(new URL(url), HttpMethod.GET);
