@@ -42,7 +42,7 @@ public class HtmlUnitClient extends SpigetClient {
 	}
 
 	public static void disposeClient() {
-		webClient.close();
+		if (webClient != null) { webClient.close(); }
 		webClient = null;
 	}
 
