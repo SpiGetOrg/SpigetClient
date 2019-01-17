@@ -12,5 +12,6 @@ public class SpigetDownload {
 	private String      url;
 	private InputStream inputStream;
 	private int         code;
+	private boolean     available;
 
 }
