@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public class HtmlUnitClient extends SpigetClient {
 
 	static final String COOKIE_HOST        = ".spigotmc.org";
-	static final long   CLOUDFLARE_TIMEOUT = 5000;
+	static final long   CLOUDFLARE_TIMEOUT = 7000;
 
 	protected static WebClient webClient;
 
@@ -26,9 +26,9 @@ public class HtmlUnitClient extends SpigetClient {
 
 		// Javascript to pass cloudflare's security challenge
 		webClient.getOptions().setJavaScriptEnabled(true);
-		webClient.setJavaScriptTimeout(3600);
+		webClient.setJavaScriptTimeout(7000);
 
-		webClient.getOptions().setTimeout(5000);
+		webClient.getOptions().setTimeout(6000);
 		webClient.getOptions().setCssEnabled(false);
 		webClient.getOptions().setRedirectEnabled(true);
 		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
@@ -92,8 +92,10 @@ public class HtmlUnitClient extends SpigetClient {
 	}
 
 	static Page waitForCloudflare(WebClient client, WebRequest request, Page page, String xml) throws IOException, InterruptedException {
-		if (xml.contains("CloudFlare") || xml.contains("Checking your browser")) {
+		if (xml.contains("Cloudflare") || xml.contains("Checking your browser") || xml.contains("checking_browser")) {
 			bypassCloudflare = true;
+
+			log.info("Waiting for Cloudflare...");
 
 			// Give the client time to complete the Javascript challenge
 			Thread.sleep(CLOUDFLARE_TIMEOUT);

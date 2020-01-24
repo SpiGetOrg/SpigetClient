@@ -21,7 +21,8 @@ public class JsoupClient extends SpigetClient {
 		Connection.Response response = connection.execute();
 		Document document = response.parse();
 
-		if (document.toString().contains("CloudFlare")) {
+		String docString = document.toString();
+		if (docString.contains("Cloudflare") || docString.contains("checking_browser")) {
 			// We've hit cloudflare -> enable bypass and try again
 			bypassCloudflare = true;
 			return SpigetClient.get(url);
