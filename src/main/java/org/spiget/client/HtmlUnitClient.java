@@ -6,6 +6,8 @@ import com.gargoylesoftware.htmlunit.util.Cookie;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -15,7 +17,7 @@ import java.util.logging.Level;
 public class HtmlUnitClient extends SpigetClient {
 
 	static final String COOKIE_HOST        = ".spigotmc.org";
-	static final long   CLOUDFLARE_TIMEOUT = 7000;
+	static final long   CLOUDFLARE_TIMEOUT = 5100;
 
 	protected static WebClient webClient;
 
@@ -92,10 +94,18 @@ public class HtmlUnitClient extends SpigetClient {
 	}
 
 	static Page waitForCloudflare(WebClient client, WebRequest request, Page page, String xml) throws IOException, InterruptedException {
-		if (xml.contains("Cloudflare") || xml.contains("Checking your browser") || xml.contains("checking_browser")) {
+		if (xml.contains("Checking your browser") || xml.contains("checking_browser")) {
 			bypassCloudflare = true;
 
 			log.info("Waiting for Cloudflare...");
+
+			try {
+				FileWriter fileWriter = new FileWriter(new File("cfpage.html"));
+				fileWriter.write(xml);
+				fileWriter.flush();
+				fileWriter.close();
+			} catch (Exception ignored) {
+			}
 
 			// Give the client time to complete the Javascript challenge
 			Thread.sleep(CLOUDFLARE_TIMEOUT);
