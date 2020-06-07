@@ -56,6 +56,7 @@ public class HtmlUnitClient extends SpigetClient {
 		if (page instanceof HtmlPage) {
 			HtmlPage htmlPage = (HtmlPage) page;
 			page = waitForCloudflare(client, request, page, htmlPage.asXml());
+			storeCookies(client);
 
 			if (page instanceof HtmlPage) {
 				return new SpigetResponse(cookies, Jsoup.parse(((HtmlPage) page).asXml()), page.getWebResponse().getStatusCode());
@@ -73,23 +74,30 @@ public class HtmlUnitClient extends SpigetClient {
 		if (page instanceof HtmlPage) {
 			HtmlPage htmlPage = (HtmlPage) page;
 			page = waitForCloudflare(client, request, page, htmlPage.asXml());
+			storeCookies(client);
 		}
 
 		Page enclosedPage = client.getCurrentWindow().getEnclosedPage();
 		return new SpigetDownload(enclosedPage.getUrl().toString(), enclosedPage.getWebResponse().getContentAsStream(), page.getWebResponse().getStatusCode(), !(page instanceof HtmlPage));
 	}
 
-	static Page getPage(WebClient client, WebRequest request) throws IOException {
+	static void applyCookies(WebClient client) {
 		client.getCookieManager().clearCookies();
 		for (Map.Entry<String, String> cookie : cookies.entrySet()) {
 			client.getCookieManager().addCookie(new Cookie(COOKIE_HOST, cookie.getKey(), cookie.getValue()));
 		}
+	}
 
-		Page page = client.getPage(request);
-
+	static void storeCookies(WebClient client) {
 		for (Cookie cookie : client.getCookieManager().getCookies()) {
 			cookies.put(cookie.getName(), cookie.getValue());
 		}
+	}
+
+	static Page getPage(WebClient client, WebRequest request) throws IOException {
+		applyCookies(client);
+		Page page = client.getPage(request);
+		storeCookies(client);
 		return page;
 	}
 
