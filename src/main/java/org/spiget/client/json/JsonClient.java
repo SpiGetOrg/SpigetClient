@@ -32,9 +32,9 @@ public class JsonClient {
 		try {
 			json = gson.fromJson(body, JsonElement.class);
 		} catch (Exception e) {
-			System.out.println(url);
-			System.out.println(body);
 			log.log(Level.ERROR, "Failed to parse json body", e);
+			log.log(Level.WARN, url);
+			log.log(Level.WARN, body);
 			return null;
 		}
 		return new JsonResponse(response.statusCode(), json);
