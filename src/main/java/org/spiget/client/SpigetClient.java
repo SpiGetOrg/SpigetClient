@@ -54,8 +54,16 @@ public abstract class SpigetClient {
 
 	public static void saveCookiesToFile() throws IOException {
 		JsonObject cookieJson = new JsonObject();
+		Map.Entry<String, String> lastCfChlCookie = null;
 		for (Map.Entry<String, String> entry : cookies.entrySet()) {
-			cookieJson.addProperty(entry.getKey(), entry.getValue());
+			if (entry.getKey().startsWith("cf_chl_seq_")) {
+				lastCfChlCookie = entry;
+			} else {
+				cookieJson.addProperty(entry.getKey(), entry.getValue());
+			}
+		}
+		if (lastCfChlCookie != null) {
+			cookieJson.addProperty(lastCfChlCookie.getKey(), lastCfChlCookie.getValue());
 		}
 		try (Writer writer = new FileWriter(config.get("request.cookieFile").getAsString())) {
 			new Gson().toJson(cookieJson, writer);
