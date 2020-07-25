@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Level;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -47,9 +48,13 @@ public abstract class SpigetClient {
 	}
 
 	public static void loadCookiesFromFile() throws IOException {
-		JsonObject cookieJson = new JsonParser().parse(new FileReader(config.get("request.cookieFile").getAsString())).getAsJsonObject();
-		for (Map.Entry<String, JsonElement> entry : cookieJson.entrySet()) {
-			cookies.put(entry.getKey(), entry.getValue().getAsString());
+		try {
+			JsonObject cookieJson = new JsonParser().parse(new FileReader(config.get("request.cookieFile").getAsString())).getAsJsonObject();
+			for (Map.Entry<String, JsonElement> entry : cookieJson.entrySet()) {
+				cookies.put(entry.getKey(), entry.getValue().getAsString());
+			}
+		} catch (Exception e) {
+			log.log(Level.WARN, e);
 		}
 	}
 
