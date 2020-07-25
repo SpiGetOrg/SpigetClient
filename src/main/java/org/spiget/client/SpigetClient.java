@@ -31,11 +31,12 @@ public abstract class SpigetClient {
 		if (config.has("request.delay")) {
 			Thread.sleep(config.get("request.delay").getAsInt());
 		}
-		if (bypassCloudflare) {
-			return HtmlUnitClient.get(url);
-		} else {
-			return JsoupClient.get(url);
-		}
+		return PuppeteerClient.get(url);
+//		if (bypassCloudflare) {
+//			return HtmlUnitClient.get(url);
+//		} else {
+//			return JsoupClient.get(url);
+//		}
 	}
 
 	public static SpigetDownload download(String url) throws IOException, InterruptedException {

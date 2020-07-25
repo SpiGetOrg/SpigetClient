@@ -17,20 +17,20 @@ import java.util.logging.Level;
 public class HtmlUnitClient extends SpigetClient {
 
 	static final String COOKIE_HOST        = ".spigotmc.org";
-	static final long   CLOUDFLARE_TIMEOUT = 5100;
+	static final long   CLOUDFLARE_TIMEOUT = 13000;
 
 	protected static WebClient webClient;
 
 	protected static WebClient getClient() {
 		if (webClient != null) { return webClient; }
 		webClient = new WebClient(BrowserVersion.CHROME);
-		webClient.getBrowserVersion().setUserAgent(userAgent);
+//		if (userAgent != null && userAgent.length() > 0) webClient.getBrowserVersion().setUserAgent(userAgent);
 
 		// Javascript to pass cloudflare's security challenge
 		webClient.getOptions().setJavaScriptEnabled(true);
-		webClient.setJavaScriptTimeout(7000);
+		webClient.setJavaScriptTimeout(10000);
 
-		webClient.getOptions().setTimeout(6000);
+		webClient.getOptions().setTimeout(15000);
 		webClient.getOptions().setCssEnabled(false);
 		webClient.getOptions().setRedirectEnabled(true);
 		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
