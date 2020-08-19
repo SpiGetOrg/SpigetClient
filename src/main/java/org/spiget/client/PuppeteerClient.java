@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Log4j2
@@ -49,10 +51,17 @@ public class PuppeteerClient extends SpigetClient {
                             log.info("page file changed");
                             Map<String,String> cookies = parseCookies(new String(Files.readAllBytes(Paths.get(DIR_NAME+"cookies_simple.json"))));
                             String documentString = new String(Files.readAllBytes(Paths.get(DIR_NAME+"page.html")));
+                            List<String> lines = Arrays.asList(documentString.split("\n"));
+                            String loadedUrl = lines.get(0);
+                            if (!url.equals(loadedUrl)) {
+                                log.warn("Requested URL didn't match returned URL (" + url + " != " + loadedUrl + ")");
+                                return new SpigetResponse(new HashMap<>(), null, 500);
+                            }
+                            String responseCodeStr = lines.get(1);
                             int code = 200;
-                            if (documentString.length() <= 4) {
+                            if (responseCodeStr.length() <= 4) {
                                 try {
-                                    code = Integer.parseInt(documentString);
+                                    code = Integer.parseInt(responseCodeStr);
                                 } catch (NumberFormatException e) {
                                 }
                             }
