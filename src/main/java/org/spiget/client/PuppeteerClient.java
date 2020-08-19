@@ -20,6 +20,14 @@ public class PuppeteerClient extends SpigetClient {
    public static String DIR_NAME;
     public static Path DIR;
 
+    public static String getUserAgent() {
+        try {
+            return new String(Files.readAllBytes(Paths.get(DIR_NAME + "useragent.txt")));
+        } catch (IOException e) {
+            return "Spiget";
+        }
+    }
+
     public static SpigetResponse get(String url) throws IOException, InterruptedException {
         File toLoadFile = new File(DIR_NAME + "toload.txt");
         toLoadFile.deleteOnExit();
@@ -39,7 +47,16 @@ public class PuppeteerClient extends SpigetClient {
 //                        log.info(changed.toString());
                         if (changed.endsWith("page.html")) {
                             log.info("page file changed");
-                            return new SpigetResponse(parseCookies(new String(Files.readAllBytes(Paths.get(DIR_NAME+"cookies_simple.json")))), Jsoup.parse(new String(Files.readAllBytes(Paths.get(DIR_NAME+"page.html")))), 200);
+                            Map<String,String> cookies = parseCookies(new String(Files.readAllBytes(Paths.get(DIR_NAME+"cookies_simple.json"))));
+                            String documentString = new String(Files.readAllBytes(Paths.get(DIR_NAME+"page.html")));
+                            int code = 200;
+                            if (documentString.length() <= 4) {
+                                try {
+                                    code = Integer.parseInt(documentString);
+                                } catch (NumberFormatException e) {
+                                }
+                            }
+                            return new SpigetResponse(cookies, Jsoup.parse(documentString), code);
                         }
                     }
                     boolean valid = wk.reset();

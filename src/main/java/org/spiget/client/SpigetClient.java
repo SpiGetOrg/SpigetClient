@@ -32,7 +32,11 @@ public abstract class SpigetClient {
 		if (config.has("request.delay")) {
 			Thread.sleep(config.get("request.delay").getAsInt());
 		}
-		return PuppeteerClient.get(url);
+		SpigetResponse response = PuppeteerClient.get(url);
+		userAgent = PuppeteerClient.getUserAgent();
+		cookies.clear();
+		cookies.putAll(response.getCookies());
+		return response;
 //		if (bypassCloudflare) {
 //			return HtmlUnitClient.get(url);
 //		} else {

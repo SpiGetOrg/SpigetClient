@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class HtmlUnitClient extends SpigetClient {
 
 	static final String COOKIE_HOST        = ".spigotmc.org";
-	static final long   CLOUDFLARE_TIMEOUT = 13000;
+	static final long   CLOUDFLARE_TIMEOUT = 7000;
 
 	protected static WebClient webClient;
 
