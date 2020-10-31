@@ -32,7 +32,7 @@ public abstract class SpigetClient {
 		if (config.has("request.delay")) {
 			Thread.sleep(config.get("request.delay").getAsInt());
 		}
-		SpigetResponse response = PuppeteerClient.get(url);
+		SpigetResponse response = PuppeteerClient2.get(url);
 		userAgent = PuppeteerClient.getUserAgent();
 		cookies.clear();
 		cookies.putAll(response.getCookies());
