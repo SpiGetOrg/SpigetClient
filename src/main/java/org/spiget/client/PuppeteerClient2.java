@@ -29,7 +29,7 @@ public class PuppeteerClient2 extends SpigetClient {
         connection.followRedirects(true);
         connection.ignoreHttpErrors(true);
         connection.ignoreContentType(true);
-        connection.timeout(5000);
+        connection.timeout(60000);
 
         Connection.Response response = connection.execute();
         JsonObject json = GSON.fromJson(response.body(), JsonObject.class);
