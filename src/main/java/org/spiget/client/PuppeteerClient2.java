@@ -12,22 +12,19 @@ import org.jsoup.Jsoup;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Log4j2
 public class PuppeteerClient2 extends SpigetClient {
 
-    public static List<String> HOSTS = new ArrayList<>();
+    public static String HOST;
     public static Gson GSON = new Gson();
 
-    static String getHost() {
-        return HOSTS.get(ThreadLocalRandom.current().nextInt(HOSTS.size()));
-    }
-
     public static SpigetResponse get(String url) throws IOException, InterruptedException {
-        String fullUrl = getHost() + "/" + URLEncoder.encode(url, StandardCharsets.UTF_8.name());
-        log.info(fullUrl);
+        String fullUrl = HOST+ "/" + URLEncoder.encode(url, StandardCharsets.UTF_8.name());
         Connection connection = Jsoup.connect(fullUrl).method(Connection.Method.GET);
         connection.followRedirects(true);
         connection.ignoreHttpErrors(true);
