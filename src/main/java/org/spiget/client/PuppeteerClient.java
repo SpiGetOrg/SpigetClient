@@ -3,6 +3,7 @@ package org.spiget.client;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.sentry.Sentry;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.jsoup.Jsoup;
@@ -79,6 +80,7 @@ public class PuppeteerClient extends SpigetClient {
 
             return new SpigetResponse(new HashMap<>(), null, 500);
         } catch (Throwable throwable) {
+            Sentry.captureException(throwable);
             log.log(Level.ERROR, throwable);
             throw new RuntimeException(throwable);
         }
@@ -92,6 +94,7 @@ public class PuppeteerClient extends SpigetClient {
                 map.put(entry.getKey(), entry.getValue().getAsString());
             }
         } catch (Exception e) {
+            Sentry.captureException(e);
             log.log(Level.WARN, e);
         }
         return map;

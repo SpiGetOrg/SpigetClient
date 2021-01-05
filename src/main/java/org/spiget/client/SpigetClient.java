@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.sentry.Sentry;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 
@@ -58,6 +59,7 @@ public abstract class SpigetClient {
 				cookies.put(entry.getKey(), entry.getValue().getAsString());
 			}
 		} catch (Exception e) {
+			Sentry.captureException(e);
 			log.log(Level.WARN, e);
 		}
 	}

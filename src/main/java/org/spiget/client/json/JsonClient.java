@@ -3,6 +3,7 @@ package org.spiget.client.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import io.sentry.Sentry;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.jsoup.Connection;
@@ -32,6 +33,7 @@ public class JsonClient {
 		try {
 			json = gson.fromJson(body, JsonElement.class);
 		} catch (Exception e) {
+			Sentry.captureException(e);
 			log.log(Level.ERROR, "Failed to parse json body", e);
 			log.log(Level.WARN, url);
 			log.log(Level.WARN, body);
