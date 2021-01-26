@@ -7,6 +7,8 @@ import com.google.gson.JsonParser;
 import io.sentry.Sentry;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
+import org.inventivetalent.metrics.Metric;
+import org.inventivetalent.metrics.Metrics;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,10 +25,23 @@ public abstract class SpigetClient {
 	public static final String BASE_URL = "https://www.spigotmc.org/";
 	public static String userAgent;
 
+	public static Metrics metrics;
+	public static Metric requestsMetric;
+	public static String project = "default";
+
 	public static boolean             bypassCloudflare = true;
 	public static Map<String, String> cookies          = new HashMap<>();
 
+	static void initMetrics() {
+		if (metrics != null) {
+			requestsMetric = metrics.metric("spiget", "spigot_requests");
+		}
+	}
+
 	public static SpigetResponse get(String url) throws IOException, InterruptedException {
+		if (requestsMetric == null) {
+			initMetrics();
+		}
 		if (config.get("debug.connections").getAsBoolean()) {
 			log.debug("GET " + url);
 		}
