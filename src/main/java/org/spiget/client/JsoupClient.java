@@ -12,6 +12,9 @@ import java.io.IOException;
 public class JsoupClient extends SpigetClient {
 
     public static SpigetResponse get(String url) throws IOException, InterruptedException {
+        if (SpigetClient.requestsMetric == null) {
+            SpigetClient.initMetrics();
+        }
         MetricDataBuilder m = SpigetClient.requestsMetric
                 .tag("project", SpigetClient.project)
                 .tag("cfbypass", String.valueOf(bypassCloudflare))

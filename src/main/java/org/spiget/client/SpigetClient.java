@@ -32,7 +32,7 @@ public abstract class SpigetClient {
 	public static boolean             bypassCloudflare = true;
 	public static Map<String, String> cookies          = new HashMap<>();
 
-	static void initMetrics() {
+	public static void initMetrics() {
 		if (metrics != null) {
 			requestsMetric = metrics.metric("spiget", "spigot_requests");
 		}

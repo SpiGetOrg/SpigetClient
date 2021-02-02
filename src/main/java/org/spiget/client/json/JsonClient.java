@@ -24,6 +24,9 @@ public class JsonClient {
 		if (logConn) {
 			log.info("GET " + url);
 		}
+		if (SpigetClient.requestsMetric == null) {
+			SpigetClient.initMetrics();
+		}
 
 		MetricDataBuilder m = SpigetClient.requestsMetric
 				.tag("project", SpigetClient.project)
