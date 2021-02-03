@@ -24,8 +24,9 @@ public class HtmlUnitClient extends SpigetClient {
 
     protected static WebClient getClient() {
         if (webClient != null) { return webClient; }
-        webClient = new WebClient(BrowserVersion.CHROME);
-        //		if (userAgent != null && userAgent.length() > 0) webClient.getBrowserVersion().setUserAgent(userAgent);
+        webClient = new WebClient(new BrowserVersion.BrowserVersionBuilder(BrowserVersion.CHROME)
+                .setUserAgent(userAgent)
+                .build());
 
         // Javascript to pass cloudflare's security challenge
         webClient.getOptions().setJavaScriptEnabled(true);
@@ -95,7 +96,7 @@ public class HtmlUnitClient extends SpigetClient {
         }
 
         Page enclosedPage = client.getCurrentWindow().getEnclosedPage();
-        int code =  page.getWebResponse().getStatusCode();
+        int code = page.getWebResponse().getStatusCode();
         m.tag("code", String.valueOf(code))
                 .tag("state", "success")
                 .inc();
