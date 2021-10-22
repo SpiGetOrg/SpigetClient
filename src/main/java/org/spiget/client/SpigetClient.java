@@ -64,6 +64,9 @@ public abstract class SpigetClient {
 		if (config.get("debug.connections").getAsBoolean()) {
 			log.debug("DOWNLOAD " + url);
 		}
+		if (config.has("request.delay")) {
+			Thread.sleep(config.get("request.delay").getAsInt());
+		}
 		return HtmlUnitClient.download(url);
 	}
 
