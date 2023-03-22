@@ -70,7 +70,7 @@ public abstract class SpigetClient {
 
     public static SpigetDownload download(String url) throws IOException, InterruptedException {
         if (DOWNLOAD_OVERRIDE != null) {
-            DOWNLOAD_OVERRIDE.apply(url);
+            return DOWNLOAD_OVERRIDE.apply(url);
         }
 
         if (config.get("debug.connections").getAsBoolean()) {
