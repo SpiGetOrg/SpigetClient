@@ -39,24 +39,31 @@ public class JsonClient {
 		connection.ignoreContentType(true);
 		connection.timeout(5000);
 		Connection.Response response = connection.execute();
+		int code = response.statusCode();
 		String body = response.body();
 		JsonElement json;
 		try {
 			json = gson.fromJson(body, JsonElement.class);
-			m.tag("code", String.valueOf(response.statusCode()))
+			m.tag("code", String.valueOf(code))
 					.tag("state", "success")
 					.inc();
 		} catch (Exception e) {
-			Sentry.captureException(e);
-			log.log(Level.ERROR, "Failed to parse json body", e);
+			if (code >= 200 && code < 300) {
+				// invalid json on a successful response is unexpected
+				Sentry.captureException(e);
+				log.log(Level.ERROR, "Failed to parse json body", e);
+			} else {
+				// error pages (e.g. nginx 429, cloudflare 5xx) are html - the caller handles the status code
+				log.log(Level.WARN, "Got non-json body with code " + code);
+			}
 			log.log(Level.WARN, url);
 			log.log(Level.WARN, body);
-			m.tag("code", String.valueOf(response.statusCode()))
+			m.tag("code", String.valueOf(code))
 					.tag("state", "fail")
 					.inc();
-			return null;
+			return new JsonResponse(code, null);
 		}
-		return new JsonResponse(response.statusCode(), json);
+		return new JsonResponse(code, json);
 	}
 
 }
